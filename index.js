@@ -25,11 +25,13 @@ fetch('https://hutils.loxal.net/whois')
         input.name = key;
         input.type = "text";
         input.placeholder = key;
+        input.value = value
+        input.style.marginRight = "4px"
 
         form.insertBefore(input, btn)
 
         //form.appendChild(input))
-        $(`[name='${key}']`).value = value;
+        //$(`[name='${key}']`).value = value;
       } 
       catch (err) {console.log('GREŠKA:', err); }
     });

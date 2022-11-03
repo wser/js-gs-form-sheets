@@ -12,20 +12,24 @@ const $ = (e) => document.querySelector(e);
 const appDiv = $('#app');
 const form = $('#form');
 
-appDiv.innerHTML = `<h1>JS Starter</h1>`;
-
+appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`;
+/* prettier-ignore */
 fetch('https://hutils.loxal.net/whois')
   .then((response) => response.json()) // Extract JSON body content from HTTP response
   // Do something with the JSON data
   .then((data) => {
-    Object.entries(data).forEach( ([key, value]) => $(`[name='${key}']`) = value );
-  })
-  .then(() => {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-        .then((response) => console.log('Success!', response))
-        .then(() => form.reset())
-        .catch((error) => console.error('Error!', error.message));
+    Object.entries(data).forEach(([key, value]) => {
+      try { $(`[name='${key}']`).value = value;} 
+      catch (err) {console.log('GREŠKA:', err); }
     });
+    // let obj = JSON.stringify(data, null, 2);
+    // console.log(obj);
   });
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+    .then((response) => console.log('Success!', response))
+    .then(() => form.reset())
+    .catch((error) => console.error('Error!', error.message));
+});

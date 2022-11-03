@@ -10,24 +10,31 @@
   </head>
   <body>
     <div id="app"></div>
-    <form name="submit-to-google-sheet">
+    <!-- prettier-ignore -->
+    <form id="form">
       <input name="email" type="email" placeholder="Email" required />
       <input name="firstName" type="text" placeholder="First Name" />
       <input name="lastName" type="text" placeholder="Last Name" />
+      <input name="ip" type="text" placeholder="ip" />
+      <input name="city" type="text" placeholder="city" />
+      <input name="isp" type="text" placeholder="isp" />
+      <input name="country" type="text" placeholder="country" />
+      <input name="countryIso" type="text" placeholder="countryIso" />
+      <input name="postalCode" type="text" placeholder="postalCode" />
+      <input name="subdivisionIso" type="text" placeholder="subdivisionIso" />
+      <input name="timeZone" type="text" placeholder="timeZone" />
+      <input name="cityGeonameId" type="text" placeholder="cityGeonameId" />
+      <input name="subdivisionGeonameId" type="text" placeholder="subdivisionGeonameId" />
+      <input name="ispId" type="text" placeholder="ispId" />
+      <input name="latitude" type="text" placeholder="latitude" />
+      <input name="longitude" type="text" placeholder="longitude" />
+      <input name="fingerprint" type="text" placeholder="fingerprint" />
+      <input name="session" type="text" placeholder="session" />
+      <input name="fraud" type="text" placeholder="fraud" />
+      <input name="tor" type="text" placeholder="tor" />
       <button type="submit">Send</button>
     </form>
 
-    <script>
-      const scriptURL =
-        'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
-      const form = document.forms['submit-to-google-sheet'];
-
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-          .then((response) => console.log('Success!', response))
-          .catch((error) => console.error('Error!', error.message));
-      });
-    </script>
+    <ul id="list"></ul>
   </body>
 </html>

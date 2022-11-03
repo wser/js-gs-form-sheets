@@ -11,6 +11,7 @@ const $ = (e) => document.querySelector(e);
 
 const appDiv = $('#app');
 const form = $('#form');
+const btn = $(`[name=submit]`);
 
 appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`;
 /* prettier-ignore */
@@ -19,7 +20,17 @@ fetch('https://hutils.loxal.net/whois')
   // Do something with the JSON data
   .then((data) => {
     Object.entries(data).forEach(([key, value]) => {
-      try { $(`[name='${key}']`).value = value;} 
+      try { 
+        let input = document.createElement("input");
+        input.name = key;
+        input.type = "text";
+        input.placeholder = key;
+
+        form.insertBefore(input, btn)
+
+        //form.appendChild(input))
+        $(`[name='${key}']`).value = value;
+      } 
       catch (err) {console.log('GREŠKA:', err); }
     });
     // let obj = JSON.stringify(data, null, 2);

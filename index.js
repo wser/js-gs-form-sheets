@@ -18,11 +18,7 @@ fetch('https://hutils.loxal.net/whois')
   .then((response) => response.json()) // Extract JSON body content from HTTP response
   // Do something with the JSON data
   .then((data) => {
-    //let formFill = Object.entries(data).map(([key, value]) => value);
-
-    Object.entries(data).forEach(
-      ([key, value]) => ($(`#${key}`) = value)
-    );
+    Object.entries(data).forEach( ([key, value]) => $(`[name='${key}']`) = value );
   })
   .then(() => {
     form.addEventListener('submit', (e) => {

@@ -11,6 +11,12 @@ const ipCheck = 'https://hutils.loxal.net/whois';
 // Write Javascript code!
 const $ = (e) => document.querySelector(e);
 const dc = (e) => document.createElement(e);
+const transformString = (e) => {
+  /* prettier-ignore */
+  const capitalize = (str) => 
+    str.toLowerCase().replace(/\w{3,}/g, (match) => match.replace(/\w/, (m) => m.toUpperCase()));
+  return capitalize(e.replace(/([a-z0-9])([A-Z])/g, '$1 $2'));
+};
 
 const appDiv = $('#app');
 // const form = $('#form');
@@ -32,17 +38,10 @@ const createBtn = () => {
 };
 
 const makeInputField = (key, value = '', type = 'text') => {
-  /* prettier-ignore */
-  const capitalize = (str) =>
-  str.toLowerCase().replace(/\w{3,}/g, (match) =>
-    match.replace(/\w/, (m) => m.toUpperCase()));
-  let proccWord = (str) =>
-    capitalize(str.replace(/([a-z0-9])([A-Z])/g, '$1 $2'));
-
   let input = dc('input');
   input.name = key;
   input.type = type;
-  input.placeholder = proccWord(key);
+  input.placeholder = transformString(key);
   input.value = value;
   input.style.marginRight = '4px';
   //input.style.display = "none"

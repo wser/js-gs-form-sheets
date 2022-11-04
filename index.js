@@ -20,7 +20,6 @@ const transformString = (e) => {
 
 const appDiv = $('#app');
 // const form = $('#form');
-// const btn = $(`[name=submit]`);
 
 const createForm = () => {
   let form = dc('form');
@@ -30,54 +29,59 @@ const createForm = () => {
   return form;
 };
 
-const createBtn = () => {
+const createBtnSubmit = () => {
   let btn = dc('input');
   btn.type = 'submit';
+  btn.name = 'submit';
   btn.value = 'Send';
   return btn;
 };
 
 const makeInputField = (key, value = '', type = 'text') => {
   let input = dc('input');
+  if (key.endsWith('*')) input.required = true;
   input.name = key;
   input.type = type;
   input.placeholder = transformString(key);
-  input.value = value;
+  input.value = value; // fill the field with string
   input.style.marginRight = '4px';
   //input.style.display = "none"
   return input;
 };
 
-const names = ['email', 'firstName', 'lastName'];
+function composeForm(arr) {
+  let form = createForm(); // Create a form dynamically
+  for (let item of arr) form.append(makeInputField(item)); // Create input fields from array
 
-function composeForm() {
-  var form = createForm(); // Create a form dynamically
-  var s = createBtn(); // Create a submit button
-
-  for (let item of names) form.append(makeInputField(item));
-
-  form.append(s); // Append the button to the form
   return form;
 }
 
 appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the header line
 
-appDiv.appendChild(composeForm()) // add form to div
-/* prettier-ignore */
-// fetch(ipCheck) // fetch ip data
-//   .then((response) => response.json()) // Extract JSON body content from HTTP response
-//   .then((data) => // Do something with the JSON data
-//     Object.entries(data).forEach(([key, value]) => {
-//       try { form.insertBefore(makeInputField(key, value), btn) }
-//       catch (err) {console.log('GREŠKA:', err); }
-//     })
-//   );
+const names = ['email*', 'firstName', 'lastName'];
 
-// // post data to google sheets
-// form.addEventListener('submit', (e) => {
-//   e.preventDefault();
-//   fetch(scriptURL, { method: 'POST', body: new FormData(form) })
-//     .then((response) => console.log('Success!', response))
-//     .then(() => form.reset())
-//     .catch((error) => console.error('Error!', error.message));
-// });
+let form = composeForm(names); // create fundamental fields
+
+/* prettier-ignore */
+fetch(ipCheck) // fetch ip data
+  .then((response) => response.json()) // Extract JSON body content from HTTP response
+  .then((data) => {// Do something with the JSON data
+    Object.entries(data).forEach(([key, value]) => {
+      try {         
+        form.append(makeInputField(key, value)) 
+      }
+      catch (err) {console.log('GREŠKA:', err); }
+    });
+    form.append(createBtnSubmit()); // Append submit button to the form
+  });
+
+// post data to google sheets
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // fetch & post google script
+    .then((response) => console.log('Success!', response))
+    .then(() => form.reset())
+    .catch((error) => console.error('Error!', error.message));
+});
+
+appDiv.append(form);

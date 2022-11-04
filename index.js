@@ -27,6 +27,7 @@ fetch('https://hutils.loxal.net/whois')
         input.placeholder = key;
         input.value = value
         input.style.marginRight = "4px"
+        input.style.display = "none"
 
         form.insertBefore(input, btn)
 

@@ -34,7 +34,7 @@ const createBtnSubmit = () => {
   return btn;
 };
 
-const makeInputField = (key, value = '', type = 'text', hide = false) => {
+const makeInputField = (key, value = '', type = 'text', visible = true) => {
   let input = dc('input');
   if (key.endsWith('*')) input.required = true;
   input.name = key;
@@ -42,7 +42,7 @@ const makeInputField = (key, value = '', type = 'text', hide = false) => {
   input.placeholder = transformString(key);
   input.value = value; // fill the field with string
   input.style.marginRight = '4px';
-  if (hide) input.style.display = 'none';
+  if (!visible) input.style.display = 'none';
   return input;
 };
 
@@ -66,7 +66,7 @@ const createApp = () => {
     .then((response) => response.json()) // extract JSON body content from HTTP response
     .then((data) => {// do something with the JSON data
       Object.entries(data).forEach(([key, value]) => {
-        try { let prefilled = makeInputField(key, value, 'text', true) // prefill input fields
+        try { let prefilled = makeInputField(key, value, 'text', false) // prefill input fields
               form.append(prefilled) } // append each field to form
         catch (err) {console.log('GREŠKA:', err); }
       });

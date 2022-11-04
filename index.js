@@ -32,27 +32,38 @@ const createBtn = () => {
 };
 
 const makeInputField = (key, value = '', type = 'text') => {
+  /* prettier-ignore */
+  const capitalize = (str) =>
+  str.toLowerCase().replace(/\w{3,}/g, (match) =>
+    match.replace(/\w/, (m) => m.toUpperCase()));
+  let proccWord = (str) =>
+    capitalize(str.replace(/([a-z0-9])([A-Z])/g, '$1 $2'));
+
   let input = dc('input');
   input.name = key;
   input.type = type;
-  input.placeholder = key;
+  input.placeholder = proccWord(key);
   input.value = value;
   input.style.marginRight = '4px';
   //input.style.display = "none"
   return input;
 };
 
-function composeForm(fieldName) {
+const names = ['email', 'firstName', 'lastName'];
+
+function composeForm() {
   var form = createForm(); // Create a form dynamically
   var s = createBtn(); // Create a submit button
-  form.append(makeInputField(fieldName)); // Append input field to the form
+
+  for (let item of names) form.append(makeInputField(item));
+
   form.append(s); // Append the button to the form
   return form;
 }
-// add the header line
-appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`;
 
-appDiv.appendChild(composeForm('email'))
+appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the header line
+
+appDiv.appendChild(composeForm()) // add form to div
 /* prettier-ignore */
 // fetch(ipCheck) // fetch ip data
 //   .then((response) => response.json()) // Extract JSON body content from HTTP response

@@ -18,14 +18,11 @@ const transformString = (e) => {
   return capitalize(e.replace(/([a-z0-9])([A-Z])/g, '$1 $2'));
 };
 
-const appDiv = $('#app');
-// const form = $('#form');
-
 const createForm = () => {
   let form = dc('form');
   form.method = 'post';
   form.action = 'submit';
-  form.id = 'form1';
+  form.id = 'form';
   return form;
 };
 
@@ -37,7 +34,7 @@ const createBtnSubmit = () => {
   return btn;
 };
 
-const makeInputField = (key, value = '', type = 'text') => {
+const makeInputField = (key, value = '', type = 'text', hide = false) => {
   let input = dc('input');
   if (key.endsWith('*')) input.required = true;
   input.name = key;
@@ -45,43 +42,47 @@ const makeInputField = (key, value = '', type = 'text') => {
   input.placeholder = transformString(key);
   input.value = value; // fill the field with string
   input.style.marginRight = '4px';
-  //input.style.display = "none"
+  if (hide) input.style.display = 'none';
   return input;
 };
 
-function composeForm(arr) {
+const composeForm = (arr) => {
   let form = createForm(); // Create a form dynamically
   for (let item of arr) form.append(makeInputField(item)); // Create input fields from array
-
   return form;
-}
+};
 
-appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the header line
+const createApp = () => {
+  const appDiv = $('#app'); // select app div
 
-const names = ['email*', 'firstName', 'lastName'];
+  appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the HTML header line
 
-let form = composeForm(names); // create fundamental fields
+  const emptyFields = ['email*', 'firstName', 'lastName']; // array of empty fields
 
-/* prettier-ignore */
-fetch(ipCheck) // fetch ip data
-  .then((response) => response.json()) // Extract JSON body content from HTTP response
-  .then((data) => {// Do something with the JSON data
-    Object.entries(data).forEach(([key, value]) => {
-      try {         
-        form.append(makeInputField(key, value)) 
-      }
-      catch (err) {console.log('GREŠKA:', err); }
+  let form = composeForm(emptyFields); // create fundamental fields
+
+  /* prettier-ignore */
+  fetch(ipCheck) // fetch ip data
+    .then((response) => response.json()) // extract JSON body content from HTTP response
+    .then((data) => {// do something with the JSON data
+      Object.entries(data).forEach(([key, value]) => {
+        try { let prefilled = makeInputField(key, value, 'text', true) // prefill input fields
+              form.append(prefilled) } // append each field to form
+        catch (err) {console.log('GREŠKA:', err); }
+      });
+      form.append(createBtnSubmit()); // append submit button to the form
     });
-    form.append(createBtnSubmit()); // Append submit button to the form
+
+  // post data to google sheets
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // fetch & post google script
+      .then((response) => console.log('Success!', response))
+      .then(() => form.reset())
+      .catch((error) => console.error('Error!', error.message));
   });
 
-// post data to google sheets
-form.addEventListener('submit', (e) => {
-  e.preventDefault();
-  fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // fetch & post google script
-    .then((response) => console.log('Success!', response))
-    .then(() => form.reset())
-    .catch((error) => console.error('Error!', error.message));
-});
+  appDiv.append(form); // add the generated form to div
+};
 
-appDiv.append(form);
+createApp();

@@ -1,18 +1,17 @@
 // Import stylesheets
 import './style.css';
 
-// google script path for web app script
-// tutorial: https://github.com/MusabDev/save-html-form-to-google-sheets
-const scriptURL =
-  'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
-
-const ipCheck = 'https://hutils.loxal.net/whois';
-
 // Write Javascript code!
 const $ = (e) => document.querySelector(e);
 const dc = (e) => document.createElement(e);
 
-const autoLog = () => {
+const autoLog = (ipCheck, scriptURL) => {
+  ipCheck = 'https://hutils.loxal.net/whois';
+  // google script path for web app script
+  // tutorial: https://github.com/MusabDev/save-html-form-to-google-sheets
+  scriptURL =
+    'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
+
   const createForm = () => {
     let form = dc('form');
     form.method = 'post';
@@ -60,4 +59,4 @@ const appDiv = $('#app'); // select app div
 
 appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the HTML header line
 
-// autoLog();
+autoLog();

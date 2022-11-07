@@ -6,20 +6,10 @@ const $ = (e) => document.querySelector(e);
 
 const autoLog = (ipCheck, scriptURL) => {
   ipCheck = 'https://hutils.loxal.net/whois';
-  // google script path for web app script
-  // tutorial: https://github.com/MusabDev/save-html-form-to-google-sheets
-  scriptURL =
-    'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
+  /* prettier-ignore */
+  scriptURL = 'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
 
   const dc = (e) => document.createElement(e);
-
-  const createForm = () => {
-    let form = dc('form');
-    form.method = 'post';
-    form.action = 'submit';
-    form.id = 'form';
-    return form;
-  };
 
   const makeInputField = (key, value = '', type = 'text', visible = true) => {
     let input = dc('input');
@@ -30,7 +20,7 @@ const autoLog = (ipCheck, scriptURL) => {
     return input;
   };
 
-  let form = createForm(); // create form
+  let form = dc('form'); // create form
 
   /* prettier-ignore */
   fetch(ipCheck) // fetch ip data
@@ -46,8 +36,8 @@ const autoLog = (ipCheck, scriptURL) => {
 
     .then(() => appDiv.append(form)) // add the generated form to div
 
-    .then(()=> {
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // post to google script
+    .then(()=> { // post to google script
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) }) 
         .then((response) => console.log('Success!', response))      
         .catch((error) => console.error('Error!', error.message))
     })
@@ -59,4 +49,4 @@ const appDiv = $('#app'); // select app div
 
 appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the HTML header line
 
-// autoLog();
+autoLog();

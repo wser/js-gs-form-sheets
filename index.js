@@ -3,7 +3,6 @@ import './style.css';
 
 // Write Javascript code!
 const $ = (e) => document.querySelector(e);
-const dc = (e) => document.createElement(e);
 
 const autoLog = (ipCheck, scriptURL) => {
   ipCheck = 'https://hutils.loxal.net/whois';
@@ -11,6 +10,8 @@ const autoLog = (ipCheck, scriptURL) => {
   // tutorial: https://github.com/MusabDev/save-html-form-to-google-sheets
   scriptURL =
     'https://script.google.com/macros/s/AKfycbzkIeAzPnqCkJXkGi4hSZQ9rDGweR8mgMA3oqQiD40jivRmt5pAC7WSP2Htn4PmKa_1/exec';
+
+  const dc = (e) => document.createElement(e);
 
   const createForm = () => {
     let form = dc('form');
@@ -46,10 +47,9 @@ const autoLog = (ipCheck, scriptURL) => {
     .then(() => appDiv.append(form)) // add the generated form to div
 
     .then(()=> {
-      // automatically post data to google sheets
-      fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // fetch & post google script
-      .then((response) => console.log('Success!', response))      
-      .catch((error) => console.error('Error!', error.message));
+      fetch(scriptURL, { method: 'POST', body: new FormData(form) }) // post to google script
+        .then((response) => console.log('Success!', response))      
+        .catch((error) => console.error('Error!', error.message))
     })
 
     .then(() => form.parentNode.removeChild(form)) // remove form from page
@@ -59,4 +59,4 @@ const appDiv = $('#app'); // select app div
 
 appDiv.innerHTML = `<h1>JS Starter</h1><hr><br/>`; // add the HTML header line
 
-autoLog();
+// autoLog();
